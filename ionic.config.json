@@ -1,5 +1,7 @@
 {
   "name": "Charge Tracker",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "vue-vite"
 }
