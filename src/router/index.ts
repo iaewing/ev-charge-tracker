@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import { defineAsyncComponent } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 
 const routes: Array<RouteRecordRaw> = [
@@ -8,23 +9,18 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/auth/login'
   },
   {
-    path: '/auth',
-    children: [
-      {
-        path: 'login',
-        component: () => import('@/views/Auth/LoginPage.vue'),
-        meta: { requiresGuest: true }
-      },
-      {
-        path: 'register',
-        component: () => import('@/views/Auth/RegisterPage.vue'),
-        meta: { requiresGuest: true }
-      }
-    ]
+    path: '/auth/login',
+    component: defineAsyncComponent(() => import('@/views/Auth/LoginPage.vue')),
+    meta: { requiresGuest: true }
+  },
+  {
+    path: '/auth/register',
+    component: defineAsyncComponent(() => import('@/views/Auth/RegisterPage.vue')),
+    meta: { requiresGuest: true }
   },
   {
     path: '/tabs',
-    component: () => import('@/views/TabsPage.vue'),
+    component: defineAsyncComponent(() => import('@/views/TabsPage.vue')),
     meta: { requiresAuth: true },
     children: [
       {
@@ -33,19 +29,19 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'charge-events',
-        component: () => import('@/views/ChargeEvents/ChargeEventsPage.vue')
+        component: defineAsyncComponent(() => import('@/views/ChargeEvents/ChargeEventsPage.vue'))
       },
       {
         path: 'analytics',
-        component: () => import('@/views/Analytics/AnalyticsPage.vue')
+        component: defineAsyncComponent(() => import('@/views/Analytics/AnalyticsPage.vue'))
       },
       {
         path: 'locations',
-        component: () => import('@/views/Locations/LocationsPage.vue')
+        component: defineAsyncComponent(() => import('@/views/Locations/LocationsPage.vue'))
       },
       {
         path: 'settings',
-        component: () => import('@/views/Settings/SettingsPage.vue')
+        component: defineAsyncComponent(() => import('@/views/Settings/SettingsPage.vue'))
       }
     ]
   },
