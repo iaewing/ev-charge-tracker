@@ -1,0 +1,115 @@
+---
+description: whenever the development server needs to be run
+globs: 
+alwaysApply: false
+---
+# Ionic Development Server Guidelines
+
+## Default Development Command
+
+**Always use `ionic serve` for development unless there is an explicit need to use `npm run dev`.**
+
+## Preferred Command
+
+```bash
+ionic serve
+```
+
+## When to Use Each Command
+
+### Use `ionic serve` (Preferred)
+- **Default choice** for all development work
+- Provides Ionic CLI integration and tooling
+- Better error reporting for Ionic-specific issues
+- Supports Ionic DevApp for mobile testing
+- Includes Ionic CLI live reload features
+- Integrates with Capacitor for native development
+- Provides better debugging for Ionic components
+
+### Use `npm run dev` (Only When Needed)
+- When debugging Vite-specific configuration issues
+- When you need Vite's specific dev server features
+- When working on build tooling or Vite plugins
+- When `ionic serve` encounters compatibility issues
+- When explicitly testing Vite's HMR behavior
+
+## Command Comparison
+
+| Feature | `ionic serve` | `npm run dev` |
+|---------|---------------|---------------|
+| **Default Choice** | ✅ Yes | ❌ No |
+| **Ionic Integration** | ✅ Full | ⚠️ Limited |
+| **Live Reload** | ✅ Ionic-optimized | ✅ Standard |
+| **Mobile Testing** | ✅ DevApp support | ❌ Manual setup |
+| **Error Reporting** | ✅ Ionic-aware | ✅ Vite standard |
+| **Capacitor Integration** | ✅ Built-in | ⚠️ Manual |
+
+## Development Workflow
+
+### Starting Development
+```bash
+# Preferred - use this by default
+ionic serve
+
+# Only use when specifically needed
+npm run dev
+```
+
+### With Capacitor (Mobile Development)
+```bash
+# For iOS development with live reload
+ionic capacitor run ios --livereload
+
+# For Android development with live reload  
+ionic capacitor run android --livereload
+```
+
+### Build Commands
+```bash
+# Development build
+ionic build
+
+# Production build
+ionic build --prod
+
+# Or use npm scripts
+npm run build
+```
+
+## Port and Configuration
+
+- **Default Port**: `ionic serve` typically uses port 8100
+- **Vite Port**: `npm run dev` uses port 5173
+- Both support custom port configuration
+
+## Best Practices
+
+1. **Start with `ionic serve`** for all development sessions
+2. **Switch to `npm run dev`** only when troubleshooting specific issues
+3. **Use Capacitor commands** for mobile device testing
+4. **Prefer Ionic CLI** for consistency with Ionic ecosystem
+5. **Document exceptions** when `npm run dev` is required
+
+## Common Scenarios
+
+### Standard Development Session
+```bash
+ionic serve
+# Opens http://localhost:8100
+```
+
+### Testing on Mobile Device
+```bash
+ionic serve --external
+# Accessible on local network for mobile testing
+```
+
+### Debugging Build Issues
+```bash
+npm run dev
+# Use only when ionic serve doesn't help identify the issue
+```
+
+## Environment Variables
+
+Both commands respect the same environment variables from `.env` files, but `ionic serve` provides better integration with Ionic's configuration system.

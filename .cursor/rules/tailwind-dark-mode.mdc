@@ -1,0 +1,264 @@
+---
+description: Any work involving frontend styling
+globs: 
+alwaysApply: false
+---
+# Tailwind CSS with Dark Mode Support - Style Guide
+
+## Overview
+This project uses Tailwind CSS with a class-based dark mode implementation. All components should support both light and dark themes with proper contrast and accessibility.
+
+## Configuration
+- **Dark Mode**: Class-based (`darkMode: 'class'`)
+- **Theme Toggle**: Managed via [useTheme.ts](mdc:src/composables/useTheme.ts) composable
+- **Persistence**: User preference stored in [auth.ts](mdc:src/stores/auth.ts) store
+- **System Detection**: Automatic fallback to system preference
+
+## Custom Component Classes
+Use these predefined component classes from [style.css](mdc:src/style.css):
+
+### Cards and Containers
+```vue
+<!-- Use .card for consistent card styling -->
+<div class="card p-6">
+  <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Title</h3>
+</div>
+```
+
+### Buttons
+```vue
+<!-- Primary button -->
+<button class="btn-primary">Save</button>
+
+<!-- Secondary button -->
+<button class="btn-secondary">Cancel</button>
+
+<!-- Custom button with proper dark mode -->
+<button class="bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors">
+  Action
+</button>
+```
+
+### Forms
+```vue
+<!-- Form labels -->
+<label class="form-label">Email Address</label>
+
+<!-- Form inputs -->
+<input type="email" class="form-input" placeholder="Enter email" />
+
+<!-- Select dropdowns -->
+<select class="form-input">
+  <option>Choose option</option>
+</select>
+```
+
+### Statistics Cards
+```vue
+<div class="stats-card">
+  <div class="stats-number">$123.45</div>
+  <div class="stats-label">Total Cost</div>
+</div>
+```
+
+## Color Palette Usage
+
+### Primary Colors
+- Use `primary-600` for main actions, `primary-500` for dark mode
+- Use `primary-100/900` for subtle backgrounds
+
+### Status Colors
+- **Success**: `success-600` (green) for positive actions
+- **Warning**: `warning-600` (amber) for cautions
+- **Danger**: `danger-600` (red) for destructive actions
+
+### Neutral Colors
+```vue
+<!-- Backgrounds -->
+<div class="bg-gray-50 dark:bg-gray-900">        <!-- Page backgrounds -->
+<div class="bg-white dark:bg-gray-800">          <!-- Card backgrounds -->
+<div class="bg-gray-100 dark:bg-gray-700">       <!-- Secondary backgrounds -->
+
+<!-- Text -->
+<h1 class="text-gray-900 dark:text-white">       <!-- Primary text -->
+<p class="text-gray-600 dark:text-gray-400">     <!-- Secondary text -->
+<span class="text-gray-500 dark:text-gray-500">  <!-- Muted text -->
+
+<!-- Borders -->
+<div class="border border-gray-200 dark:border-gray-700">
+```
+
+## Dark Mode Patterns
+
+### Always Use Dark Variants
+```vue
+<!-- ✅ Good: Includes dark mode variants -->
+<div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+
+<!-- ❌ Bad: No dark mode support -->
+<div class="bg-white text-gray-900">
+```
+
+### Background and Text Combinations
+```vue
+<!-- Page layouts -->
+<ion-content class="bg-gray-50 dark:bg-gray-900">
+
+<!-- Card containers -->
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+
+<!-- Input fields -->
+<input class="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600">
+```
+
+### Interactive Elements
+```vue
+<!-- Hover states -->
+<button class="bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600">
+
+<!-- Focus states -->
+<input class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-400">
+
+<!-- Active states -->
+<button class="active:bg-primary-800 dark:active:bg-primary-700">
+```
+
+## Theme Management
+
+### Using the Theme Composable
+```vue
+<script setup>
+import { useTheme } from '@/composables/useTheme';
+
+const { isDark, toggleTheme, initializeTheme } = useTheme();
+
+// Initialize theme on component mount
+onMounted(() => {
+  initializeTheme();
+});
+</script>
+
+<template>
+  <!-- Theme toggle button -->
+  <button
+    @click="toggleTheme"
+    :class="[
+      'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+      isDark ? 'bg-primary-600' : 'bg-gray-200'
+    ]"
+  >
+    <span
+      :class="[
+        'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+        isDark ? 'translate-x-6' : 'translate-x-1'
+      ]"
+    />
+  </button>
+</template>
+```
+
+### Theme Transitions
+Add smooth transitions between theme changes:
+```vue
+<div class="theme-transition">  <!-- Predefined class -->
+<!-- OR -->
+<div class="transition-colors duration-200">
+```
+
+## Responsive Design Patterns
+
+### Mobile-First Approach
+```vue
+<!-- Start with mobile, add larger screen variants -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+<!-- Mobile padding, larger on desktop -->
+<div class="p-4 md:p-6 lg:p-8">
+
+<!-- Stack on mobile, row on desktop -->
+<div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+```
+
+### Container Patterns
+```vue
+<!-- Page containers -->
+<div class="max-w-2xl mx-auto p-4 space-y-6">
+
+<!-- Card grids -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+```
+
+## Accessibility Guidelines
+
+### Focus Management
+```vue
+<!-- Ensure focus rings are visible in both themes -->
+<button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-gray-800">
+```
+
+### Color Contrast
+```vue
+<!-- Use sufficient contrast ratios -->
+<div class="text-gray-700 dark:text-gray-300">   <!-- Medium contrast -->
+<div class="text-gray-900 dark:text-white">      <!-- High contrast -->
+```
+
+### State Indicators
+```vue
+<!-- Loading states -->
+<button :disabled="loading" class="disabled:opacity-50 disabled:cursor-not-allowed">
+
+<!-- Error states -->
+<input :class="[
+  'form-input',
+  hasError ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500' : ''
+]">
+```
+
+## Component Examples
+
+### Settings Toggle
+```vue
+<div class="flex items-center justify-between">
+  <div>
+    <label class="text-sm font-medium text-gray-900 dark:text-white">Dark Mode</label>
+    <p class="text-sm text-gray-600 dark:text-gray-400">Toggle theme</p>
+  </div>
+  <button @click="toggleTheme" class="toggle-switch">
+    <!-- Toggle implementation -->
+  </button>
+</div>
+```
+
+### Currency Display
+```vue
+<div class="stats-card">
+  <div class="stats-number">{{ formatCurrency(amount, currency) }}</div>
+  <div class="stats-label">Total Charging Cost</div>
+</div>
+```
+
+### Form Layout
+```vue
+<form class="space-y-6">
+  <div class="space-y-4">
+    <div>
+      <label class="form-label">Currency</label>
+      <select class="form-input">
+        <option>CAD</option>
+        <option>USD</option>
+      </select>
+    </div>
+  </div>
+</form>
+```
+
+## Best Practices
+
+1. **Always include dark variants** for colors and backgrounds
+2. **Use semantic color names** from the custom palette
+3. **Test in both themes** during development
+4. **Maintain contrast ratios** for accessibility
+5. **Use transition classes** for smooth theme switching
+6. **Follow mobile-first** responsive patterns
+7. **Leverage custom component classes** for consistency
